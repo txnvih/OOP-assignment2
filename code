@@ -1,0 +1,219 @@
+package demo.package1;
+import java.util.Scanner;
+
+class Publication
+{
+    protected int copies;
+    protected String title;
+    protected int price;
+    int sale;
+    public Publication(int copies, String title, int price)
+    {
+		super();
+		this.copies = copies;
+		this.title = title;
+		this.price = price;
+	}
+	protected int salecopy(int totalsale) {
+        System.out.println("Total sale of publication " + totalsale);
+        return totalsale;
+	}
+
+    public void accept() //accept for publication
+    {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter title:");
+        title = sc.nextLine();
+        System.out.println("Enter no of copies:");
+        copies = sc.nextInt();
+        System.out.println("Enter price:");
+        price = sc.nextInt();
+    }
+
+    public void display() //display for publication
+    {
+        System.out.println("Title: " + title);
+        System.out.println("Price: " + price);
+        System.out.println("No of copies: " + copies);
+    }
+}
+//BOOK STARTS HERE
+class Book extends Publication
+{
+    private String author;
+    
+	public Book(int copies, String title, int price, String author)
+	{
+		super(copies, title, price);
+		this.author = author;
+	}
+	public void accept() //accept for book
+	{
+		Scanner sc = new Scanner (System.in);
+        System.out.println("enter the name of author of book ");
+        author = sc.next();
+	}
+	public void display() //display for book
+    {
+        System.out.println("the name of author is: " + this.author);
+    }
+	int ordercopies() 
+	{
+		int n;
+        Scanner Sc = new Scanner(System.in);
+        System.out.println("enter the no. of copies ordered");
+        n = Sc.nextInt();
+        if(n <= copies) 
+        {
+            this.copies -= n;
+            System.out.println("Total orders of book " + this.author + " " + n);
+        }
+        else
+        {
+            System.out.println("Insufficient copies");
+        }
+    }
+    public int salecopy(int totalsale)
+    {
+        if(totalsale <= copies)
+        {
+            System.out.println("Sale of books: " + totalsale);
+        }
+        return totalsale;
+    }
+}
+//MAGAZINE STARTS HERE
+class Magazine extends Publication
+{
+	
+    public Magazine(int copies, String title, int price)
+    {
+		super(copies, title, price);
+	}
+
+    public void accept()
+    {
+		Scanner sc = new Scanner (System.in);
+        System.out.println("enter the name of author of book ");
+        this.title = sc.next();
+    }
+	void orderquantity(int order)
+    {//the book is ordered so is available for buyer to buy
+    	int m;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter no. of copies to be ordered:");
+        m = sc.nextInt();
+        if(m <= copies)
+        {
+            copies-=m;
+            System.out.println("Total order of Magazine : "+ this.title + " are " + m);
+
+        }
+        else
+        {
+            System.out.println("Insufficient copies");
+        }
+    }
+
+    int currentissue()
+    {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter number of copies of " + this.title + " to issue");
+        int current = sc.nextInt();
+        System.out.println("Enter date of issue (DDMMYYYY)");
+        String date = sc.next();
+        System.out.println("Date of issue of " + this.title + ":" + date);
+        if (current <= this.copies)
+        {
+            this.copies -= current;
+            System.out.println("Total Magazines issued: " + current);
+        } 
+        else
+        {
+            System.out.println("Insufficient Magazines");
+        }
+        return current;
+    }
+
+    void recieveissue(int current)
+    {
+    	Scanner sc = new Scanner (System.in);
+    	System.out.println("Enter number of copies to return");
+    	int received = sc.nextInt();
+    	System.out.println("Enter date of Magazine received (DDMMYYYY):");
+    	String date = sc.next();
+    	System.out.println("Received date of " + this.title + ":" + date);
+        if (received < current)
+        {
+            System.out.println("Received Date of " + this.title + ": " + date);
+            System.out.println("Magazines yet to be received: " + (current - received));
+        }
+        else
+        {
+            System.out.println("Received Date of " + this.title + ": " + date);
+        }
+        this.copies+=received;
+    }
+    public int salecopy(int totalsale)
+    {
+
+        System.out.println("Sale of magazine:" + totalsale  );
+        return totalsale;
+    }
+    public void display(){
+        System.out.println("Title of Magazine : " + this.title);
+        System.out.println("Total copies of magazine : " + this.copies);
+    
+}
+
+public class Sale 
+{
+    public static void main(String[] args) 
+    {
+        Scanner sc = new Scanner(System.in);
+        Publication p = new Publication(0,null,0);
+        Book b = new Book(0,null,0,null);
+        Magazine m = new Magazine(0,null,0);
+
+        while (true)
+        {
+            System.out.println("\nChoose an option:");
+            System.out.println("1. Accept and Display Publication");
+            System.out.println("2. Accept and Display Book");
+            System.out.println("3. Accept and Display Magazine");
+            System.out.println("4. Order and Sale Book");
+            System.out.println("5. Current Issue and Received Issue of Magazine");
+            int opt = sc.nextInt();
+
+            switch (opt)
+            {
+                case 1:
+                    p.accept();
+                    p.display();
+                    break;
+                case 2:
+                    b.accept();
+                    b.display();
+                    break;
+                case 3:
+                     m.accept();
+                     m.display();
+                    break;
+                case 4:
+                    b.accept();
+                    b.display();
+                    int order = b.ordercopies();
+                    b.salecopy(order);
+                    b.salecopy(order);
+                    break;
+                case 5:
+                    m.accept();
+                    int current =  m.currentissue();
+                    m.recieveissue(current);
+                    break;
+                default:
+                    System.out.println("Invalid");
+            }
+        }
+    }
+}
